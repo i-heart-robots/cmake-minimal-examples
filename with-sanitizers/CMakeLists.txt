@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(main)
 
-# Add Matt Arsenault's sanitizer project
+# Add Matt Arsenault's sanitizer project: https://github.com/arsenm/sanitizers-cmake
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 find_package(Sanitizers)
 
