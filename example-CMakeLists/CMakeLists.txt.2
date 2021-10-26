@@ -1,0 +1,57 @@
+cmake_minimum_required(VERSION 3.5)
+project(sim_aircraft)
+
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_CXX_FLAGS_BASE "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -Werror -Wno-error=deprecated-declarations")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+find_package(Eigen3 REQUIRED)
+find_package(Ceres REQUIRED)
+
+###################################
+## catkin specific configuration ##
+###################################
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  roslib
+  std_msgs
+  geometry_msgs
+  sim_msgs
+  sim_common
+)
+catkin_package(
+  LIBRARIES sim_aircraft
+  INCLUDE_DIRS include
+  CATKIN_DEPENDS roscpp roslib std_msgs geometry_msgs sim_msgs sim_common
+)
+
+###################################
+## Specify additional packages and directories
+## Your package locations should be listed before other locations
+###################################
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)
+
+###########
+## Build ##
+###########
+add_library(sim_aircraft
+  src/fixed-wing.cpp
+  src/multi-rotor.cpp
+  src/simple.cpp
+  src/vehicle.cpp
+)
+add_dependencies(sim_aircraft ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_include_directories(sim_aircraft PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CERES_INCLUDE_DIRS})
+target_link_libraries(sim_aircraft sim_common Eigen3::Eigen ${CERES_LIBRARIES} ${catkin_LIBRARIES})
+
+###########
+## Install
+###########
+install(TARGETS sim_aircraft
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)

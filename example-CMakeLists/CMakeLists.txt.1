@@ -1,0 +1,75 @@
+cmake_minimum_required(VERSION 3.5)
+project(sim_interfaces)
+
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_CXX_FLAGS_BASE "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -Werror -Wno-error=deprecated-declarations")
+
+################# UTIL #################
+set(PARENT_PATH ${PROJECT_SOURCE_DIR}/../../..)  # parent directory for libraries
+
+set(APP_UTIL_LIB ${PARENT_PATH}/app-util/build/ros/devel/lib/libros-app-util.so)
+set(APP_UTIL_IMPL 1)
+set(UTIL_LIBS ${APP_UTIL_LIB})
+
+include_directories(${PARENT_PATH}/app-util/include)
+
+###################################
+
+###################################
+## catkin specific configuration ##
+###################################
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  roslib
+  std_msgs
+  geometry_msgs
+  sim_msgs
+  sim_common
+  sim_aircraft
+)
+catkin_package(
+  INCLUDE_DIRS include
+  CATKIN_DEPENDS roscpp roslib std_msgs geometry_msgs sim_msgs sim_common sim_aircraft
+)
+
+###################################
+## Specify additional packages and directories
+## Your package locations should be listed before other locations
+###################################
+include_directories(
+  include
+  ${MODULES_PATH}/target-dynamics
+  ${catkin_INCLUDE_DIRS}
+)
+
+###########
+## Build ##
+###########
+add_executable(gui_interface
+  src/gui_node.cpp
+  src/gui.cpp
+)
+add_dependencies(gui_interface ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(gui_interface sim_common sim_aircraft ${APP_UTIL_LIB} ${catkin_LIBRARIES})
+
+add_executable(target_interface
+  src/targets_node.cpp
+  src/targets.cpp
+)
+add_dependencies(target_interface ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(target_interface sim_common sim_aircraft ${APP_UTIL_LIB} ${catkin_LIBRARIES})
+target_compile_definitions(target_interface PRIVATE "IMPLEMENTATION=${APP_UTIL_IMPL}")
+
+###########
+## Install
+###########
+install(TARGETS gui_interface
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS target_interface
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

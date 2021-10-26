@@ -1,0 +1,56 @@
+cmake_minimum_required(VERSION 3.5)
+project(sim_common)
+
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+SET(CMAKE_CXX_FLAGS_BASE "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -Werror -Wno-error=deprecated-declarations")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+find_package(Eigen3 REQUIRED)
+
+###################################
+## catkin specific configuration ##
+###################################
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  roslib
+  std_msgs
+  geometry_msgs
+  sim_msgs
+)
+catkin_package(
+  LIBRARIES sim_common
+  INCLUDE_DIRS include
+  CATKIN_DEPENDS roscpp roslib std_msgs geometry_msgs sim_msgs
+)
+
+###################################
+## Specify additional packages and directories
+## Your package locations should be listed before other locations
+###################################
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)
+
+###########
+## Build ##
+###########
+add_library(sim_common
+  src/pid_controller.cpp
+  src/second_order_system.cpp
+  src/state.cpp
+  src/utils.cpp
+  include/common/params.h
+  include/common/types.h
+)
+add_dependencies(sim_common ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(sim_common Eigen3::Eigen ${catkin_LIBRARIES})
+
+###########
+## Install
+###########
+install(TARGETS sim_common
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
