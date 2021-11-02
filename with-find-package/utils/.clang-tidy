@@ -1,0 +1,129 @@
+Checks: |
+    -*,
+    bugprone-*,
+    cppcoreguidelines-*,
+    clang-analyzer-*,
+    google-*,
+    modernize-*,
+    readability-identifier-naming,
+    -google-runtime-references,
+    -cppcoreguidelines-owning-memory,
+    -cppcoreguidelines-pro-type-vararg,
+    -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+    -cppcoreguidelines-special-member-functions,
+    -modernize-use-equals-delete
+
+# Rationale behind above omissions:
+# -google-runtime-references: We don't mind using non-const refs as args
+# -cppcoreguidelines-owning-memory: This rule is too restrictive
+# -cppcoreguidelines-pro-type-vararg: Warns on every ROS_{INFO/WARN/*}
+# -cppcoreguidelines-pro-bounds-array-to-pointer-decay: Warns on every ROS_{INFO/WARN/*}
+# -cppcoreguidelines-special-member-functions: Warns for every C++ unit test declared with TEST
+# -modernize-use-equals-delete: Warns on GTest of the version that we use
+
+HeaderFilterRegex: '.*/src/.*'
+
+CheckOptions:
+# Classes, structs, ...
+  - key:    readability-identifier-naming.NamespaceCase
+    value:  lower_case
+  - key:    readability-identifier-naming.ClassCase
+    value:  CamelCase
+  - key:    readability-identifier-naming.StructCase
+    value:  CamelCase
+  - key:    readability-identifier-naming.EnumCase
+    value:  CamelCase
+  - key:    readability-identifier-naming.UnionCase
+    value:  CamelCase
+  - key:    readability-identifier-naming.TypedefCase
+    value:  CamelCase
+  - key:    readability-identifier-naming.TemplateParameterCase
+    value:  CamelCase
+
+# Variables, member variables, ...
+  - key:    readability-identifier-naming.ParameterCase
+    value:  lower_case
+  - key:    readability-identifier-naming.VariableCase
+    value:  lower_case
+  - key:    readability-identifier-naming.MemberCase
+    value:  lower_case
+  - key:    readability-identifier-naming.PublicMemberCase
+    value:  lower_case
+  - key:    readability-identifier-naming.ProtectedMemberCase
+    value:  lower_case
+  - key:    readability-identifier-naming.PrivateMemberCase
+    value:  lower_case
+  - key:    readability-identifier-naming.PrivateMemberSuffix
+    value:  _
+  - key:    readability-identifier-naming.ProtectedMemberSuffix
+    value:  _
+
+# Functions, methods, ...
+  - key:    readability-identifier-naming.FunctionCase
+    value:  camelBack
+  - key:    readability-identifier-naming.MethodCase
+    value:  camelBack
+
+# constants (umbrella rule ?)
+  - key:    readability-identifier-naming.ConstantCase
+    value:  UPPER_CASE
+  - key:    readability-identifier-naming.ConstantPrefix
+    value:  ''
+  - key:    readability-identifier-naming.ConstantSuffix
+    value:  ''
+
+# static constants in class
+  - key:    readability-identifier-naming.ClassConstantCase
+    value:  UPPER_CASE
+  - key:    readability-identifier-naming.ClassConstantPrefix
+    value:  ''
+  - key:    readability-identifier-naming.ClassConstantSuffix
+    value:  ''
+
+# non-static constants in class
+  - key:    readability-identifier-naming.ConstantMemberCase
+    value:  lower_case
+  - key:    readability-identifier-naming.ConstantMemberPrefix
+    value:  ''
+  - key:    readability-identifier-naming.ConstantMemberSuffix
+    value:  _
+
+# constants uses as parameters of function declarations/definitions
+  - key:    readability-identifier-naming.ConstantParameterCase
+    value:  lower_case
+  - key:    readability-identifier-naming.ConstantParameterPrefix
+    value:  ''
+  - key:    readability-identifier-naming.ConstantParameterSuffix
+    value:  ''
+
+# static global constants
+  - key:    readability-identifier-naming.StaticConstantCase
+    value:  UPPER_CASE
+  - key:    readability-identifier-naming.StaticConstantPrefix
+    value:  ''
+  - key:    readability-identifier-naming.StaticConstantSuffix
+    value:  ''
+
+# non-static global constants
+  - key:    readability-identifier-naming.GlobalConstantCase
+    value:  UPPER_CASE
+  - key:    readability-identifier-naming.GlobalConstantPrefix
+    value:  ''
+  - key:    readability-identifier-naming.GlobalConstantSuffix
+    value:  ''
+
+# local constants
+  - key:    readability-identifier-naming.LocalConstantCase
+    value:  lower_case
+  - key:    readability-identifier-naming.LocalConstantPrefix
+    value:  ''
+  - key:    readability-identifier-naming.LocalConstantSuffix
+    value:  ''
+
+# enum
+  - key:    readability-identifier-naming.EnumConstantCase
+    value:  UPPER_CASE
+  - key:    readability-identifier-naming.EnumConstantPrefix
+    value:  ''
+  - key:    readability-identifier-naming.EnumConstantSuffix
+    value:  ''

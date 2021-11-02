@@ -1,0 +1,2 @@
+set(utils_LIBRARIES @utils_LIBRARIES@)
+set(utils_INCLUDE_DIRS @utils_INCLUDE_DIRS@)
